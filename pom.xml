@@ -161,5 +161,16 @@
 
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                    <include>**/*.tpl</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 </project>
