@@ -56,7 +56,7 @@ $('#bookOrderButton').click(function(event) {
    var jqXHR = jQuery.ajax({
    		dataType: "json",
    		contentType: "application/json; charset=utf-8",
-   		url: 'http://localhost:8080/api/goodsnapshot/save',
+   		url: appPrefix + '/api/goodsnapshot/save',
    		data: JSON.stringify(bookInfo),
    	    timeout: 90000,
    	    type: 'POST'
@@ -112,7 +112,7 @@ function sendDetailRequest(orderNo, goodsId) {
     var jqXHRForSnapshot = jQuery.ajax({
         dataType: "json",
         contentType: "application/json; charset=utf-8",
-        url: 'http://localhost:8080/api/goodsnapshot/detail',
+        url: appPrefix + '/api/goodsnapshot/detail',
         data: JSON.stringify(query),
         timeout: 90000,
         type: 'POST'

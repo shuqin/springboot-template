@@ -13,9 +13,6 @@ import static cc.lovesq.util.Currency.fen2yuan;
 public class GoodsServiceSnapshotProgress {
 
     @Resource
-    private ServiceTplSplitList serviceTplSplitList;
-
-    @Resource
     private ServiceTplList serviceTplList;
 
     public List<GoodsServiceSnapshot> getServiceDescs(Order order) {

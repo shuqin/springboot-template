@@ -1,14 +1,19 @@
 package cc.lovesq.goodssnapshot;
 
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.FileCopyUtils;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -17,6 +22,8 @@ import static com.sun.jmx.mbeanserver.Util.cast;
 
 @Component
 public class ServiceTplList implements ServiceTplListInf {
+
+    private static Log log = LogFactory.getLog(ServiceTplList.class);
 
     @Value(value="classpath:service.tpl")
     private Resource data;
@@ -33,15 +40,6 @@ public class ServiceTplList implements ServiceTplListInf {
     public void init() throws IOException {
 
         convertToList();
-
-        watchService = FileSystems.getDefault().newWatchService();
-        System.out.println("parent: " + data.getFile().getParent());
-        Paths.get(data.getFile().getParent()).register(watchService,
-                StandardWatchEventKinds.ENTRY_CREATE,
-                StandardWatchEventKinds.ENTRY_DELETE,
-                StandardWatchEventKinds.ENTRY_MODIFY);
-
-        new Thread(() -> listenFileModified()).start();
     }
 
     private void convertToList() {
@@ -116,10 +114,11 @@ public class ServiceTplList implements ServiceTplListInf {
 
     public String getData(){
         try {
-            File file = data.getFile();
-            String jsonData = this.jsonRead(file);
-            return jsonData;
-        } catch (Exception e) {
+            ClassPathResource cpr = new ClassPathResource("service.tpl");
+            byte[] bdata = FileCopyUtils.copyToByteArray(cpr.getInputStream());
+            return new String(bdata, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            log.warn("IOException", e);
             return null;
         }
     }
