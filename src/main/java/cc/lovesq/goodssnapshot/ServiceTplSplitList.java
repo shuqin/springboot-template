@@ -53,12 +53,24 @@ public class ServiceTplSplitList implements ServiceTplListInf {
 
     private void convertToList() {
 
-        serviceTplList.clear();
-        String json = getData(data1);
-        serviceTplList.addAll(JSONObject.parseArray(json, ServiceTpl.class));
+        try {
+            serviceTplList.clear();
+            String json = getData(data1);
+            serviceTplList.addAll(JSONObject.parseArray(json, ServiceTpl.class));
 
-        String json2 = getData(data2);
-        serviceTplList.addAll(JSONObject.parseArray(json2, ServiceTpl.class));
+            String json2 = getData(data2);
+            serviceTplList.addAll(JSONObject.parseArray(json2, ServiceTpl.class));
+        } catch (Exception ex) {
+            serviceTplList.add(new ServiceTpl("express", "快递发货", "支持快递发货，本商品$info"));
+            serviceTplList.add(new ServiceTpl("selfetch", "到店自提", "可就近选择自提点并预约自提时间"));
+            serviceTplList.add(new ServiceTpl("localDelivery", "同城配送", "可选择同城配送并预约送达时间，本商品运费：最低 ￥$startPrice 元，$deliveryPrice"));
+            serviceTplList.add(new ServiceTpl("codpay", "货到付款", "此商品支持货到付款"));
+
+            serviceTplList.add(new ServiceTpl("refundAndReturn", "支持退换","支持买家申请退换"));
+            serviceTplList.add(new ServiceTpl("secureService", "收货后结算", "该店铺交易由有赞提供资金存管服务，当符合以下条件时，资金自动结算给商家：买家确认收货或到达约定的自动确认收货日期。交易资金未经有赞存管的情形（储值型、电子卡券等）不在本服务范围内。"));
+            serviceTplList.add(new ServiceTpl("retailShop", "线下门店", "该店铺拥有线下门店，商家已展示门店信息"));
+        }
+
 
         Map<String, List<ServiceTpl>> serviceTplLocalMap = new HashMap<>();
         for (ServiceTpl serviceTpl : serviceTplList) {
@@ -71,6 +83,10 @@ public class ServiceTplSplitList implements ServiceTplListInf {
             serviceTplLocalMap.get(key).add(serviceTpl);
         }
         serviceTplMap = serviceTplLocalMap;
+    }
+
+    private void downgrade() {
+
     }
 
     private void listenFileModified() {

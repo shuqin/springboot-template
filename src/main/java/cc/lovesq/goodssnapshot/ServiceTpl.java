@@ -8,6 +8,14 @@ public class ServiceTpl {
     private long start;
     private long end;
 
+    public ServiceTpl(String key, String title, String tpl) {
+        this.key = key;
+        this.title = title;
+        this.tpl = tpl;
+        this.start = 0L;
+        this.end = 1616029776L;
+    }
+
     public String getUniqueKey() {
         return key + "_" + start + "_" + end;
     }
