@@ -1,5 +1,6 @@
 package cc.lovesq.goodssnapshot;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -58,6 +59,7 @@ public class ServiceTplList implements ServiceTplListInf {
             serviceTplLocalMap.get(key).add(serviceTpl);
         }
         serviceTplMap = serviceTplLocalMap;
+        log.info("serviceTplMap: {}" + JSON.toJSONString(serviceTplMap));
     }
 
     private void listenFileModified() {

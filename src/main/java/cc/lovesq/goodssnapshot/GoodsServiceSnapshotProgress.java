@@ -1,6 +1,9 @@
 package cc.lovesq.goodssnapshot;
 
+import cc.lovesq.experiments.Experiments;
 import cc.lovesq.model.Order;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -11,6 +14,8 @@ import static cc.lovesq.util.Currency.fen2yuan;
 
 @Component
 public class GoodsServiceSnapshotProgress {
+
+    private static Log log = LogFactory.getLog(GoodsServiceSnapshotProgress.class);
 
     @Resource
     private ServiceTplList serviceTplList;
@@ -24,11 +29,17 @@ public class GoodsServiceSnapshotProgress {
     }
 
     public GoodsServiceSnapshot transfer(Order order, String key) {
-        GoodsServiceSnapshot goodsServiceSnapshot = new GoodsServiceSnapshot();
-        goodsServiceSnapshot.setKey(key);
-        goodsServiceSnapshot.setTitle(getServiceTplListInf().getTpl(key, order.getBookTime()).getTitle());
-        goodsServiceSnapshot.setDesc(getServiceDescInner(order, key));
-        return goodsServiceSnapshot;
+        try {
+            GoodsServiceSnapshot goodsServiceSnapshot = new GoodsServiceSnapshot();
+            goodsServiceSnapshot.setKey(key);
+            goodsServiceSnapshot.setTitle(getServiceTplListInf().getTpl(key, order.getBookTime()).getTitle());
+            goodsServiceSnapshot.setDesc(getServiceDescInner(order, key));
+            return goodsServiceSnapshot;
+        } catch (Exception ex) {
+            log.error(String.format( "Error:" + ex.getMessage() + " orderNo: %s, key: %s bookTime: %d", order.getOrderNo(), key, order.getBookTime()), ex);
+            throw new RuntimeException(ex);
+        }
+
 
     }
 

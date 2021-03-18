@@ -8,12 +8,12 @@ public class ServiceTpl {
     private long start;
     private long end;
 
-    public ServiceTpl(String key, String title, String tpl) {
+    public ServiceTpl(String key, String title, String tpl, long start, long end) {
         this.key = key;
         this.title = title;
         this.tpl = tpl;
-        this.start = 0L;
-        this.end = 1616029776L;
+        this.start = start;
+        this.end = end;
     }
 
     public String getUniqueKey() {
