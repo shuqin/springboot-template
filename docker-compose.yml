@@ -1,0 +1,36 @@
+version: '3'
+services:
+  db:
+    image: 'mysql'
+    container_name: 'mysql'
+    network_mode: 'bridge'
+    environment:
+      MYSQL_ROOT_PASSWORD: '123456'
+      MYSQL_USER: 'root'
+      MYSQL_PASS: '123456'
+      MYSQL_ROOT_HOST: '%'
+      TZ: 'Asia/Shanghai'
+    restart: always
+    volumes:
+      - "/var/lib/mysql:/var/lib/mysql"
+      - "/etc/mysql/conf/my.cnf:/etc/my.cnf"
+      - "/var/log/mysql/:/var/log"
+    ports:
+      - "3306:3306"
+  sbt:
+    restart: always
+    build:
+      context: "./build"
+      dockerfile: "./Dockerfile"
+    environment:
+      TZ: "Asia/Shanghai"
+    volumes:
+      - "/var/log/sbt:/var/log/sbt"
+    links:
+      - db:db
+    expose:
+      - 8888
+    ports:
+      - "8888:8888"
+    depends_on:
+      - db
